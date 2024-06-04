@@ -20,7 +20,7 @@ final class Rook: GamePiece {
                 moves.append(m)
                 step += 1
 
-                if m.captured != nil { break }
+                if m.captured != nil { break } // End of process
             }
         }
 
