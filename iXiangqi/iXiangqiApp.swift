@@ -11,9 +11,15 @@ import SwiftUI
 struct iXiangqiApp: App {
 
     var body: some Scene {
+#if os(iOS)
         WindowGroup {
-//            MainMenuView()
-            GameView().environmentObject(GameManager())
+            //            MainMenuView()
+            GameView(gameManager: GameManager()).environmentObject(GameManager())
         }
+#elseif os(macOS)
+        WindowGroup {
+            MainMenuView()
+        }
+#endif
     }
 }

@@ -10,17 +10,23 @@ import SwiftUI
 struct PlayerInfoView: View {
 
     let name: String
-    let alignment: HorizontalAlignment
+    let side: GameSide
     @Binding var timer: Int
+    @Binding var capturedPieces: [GamePiece]
 
     var body: some View {
-        VStack(alignment: alignment) {
+        VStack(alignment: .leading) {
             Text(name)
-                .foregroundColor(.red)
+                .font(.title)
+                .foregroundColor(side == .red ? .red : .black)
+            Text(formattedTime(from: timer))
                 .font(.title)
 
-            Text("\(formattedTime(from: timer))")
-                .font(.title)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum:25))]) {
+                ForEach(Array(capturedPieces.enumerated()), id: \.offset) { _, piece in
+                    GamePieceView(piece: piece)
+                }
+            }
         }
     }
 
@@ -32,5 +38,8 @@ struct PlayerInfoView: View {
 }
 
 #Preview {
-    PlayerInfoView(name: "Hhihi", alignment: .leading, timer: .constant(100))
+    let gm = GameManager()
+    let pieces = gm.pieces.dropLast(15)
+
+    return PlayerInfoView(name: "Hhihi", side: .red, timer: .constant(100), capturedPieces: .constant([]))
 }

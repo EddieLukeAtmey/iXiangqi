@@ -16,7 +16,17 @@ enum GameState {
 
 final class GameManager: ObservableObject {
     private(set) var pieces: [GamePiece]
-    private(set) var capturedPieces = [GamePiece]()
+    private var capturedPieces: [GamePiece] { redCapturedPieces + blackCapturedPieces }
+
+    private func piecesCaptured(by side: GameSide) -> [GamePiece] {
+        capturedPieces.filter({ $0.side != side })
+    }
+
+    /// This array is black's side game pieces, those captured by red.
+    @Published var redCapturedPieces = [GamePiece]()
+
+    /// This array is red's side game pieces, those captured by red.
+    @Published var blackCapturedPieces = [GamePiece]()
 
     // moves and their original position
     private(set) var moves = [(Move, Position)]()
@@ -62,7 +72,8 @@ final class GameManager: ObservableObject {
 
         // setup pieces and poisition
         pieces.removeAll()
-        capturedPieces.removeAll()
+        redCapturedPieces.removeAll()
+        blackCapturedPieces.removeAll()
         moves.removeAll()
 
         Self.allStartingPositions.forEach { pos in
@@ -132,7 +143,33 @@ final class GameManager: ObservableObject {
 
 // MARK: - Actions
 extension GameManager {
-    func canMove(_ move: Move) throws -> Bool {
+    func performMove(_ move: Move) throws {
+        // Check if the move is valid and update the game state accordingly
+        try validateMove(move)
+        if let captured = move.captured, let idx = pieces.firstIndex(of: captured) {
+            if captured.side == .red {
+                blackCapturedPieces.append(captured)
+            } else {
+                redCapturedPieces.append(captured)
+            }
+            pieces.remove(at: idx)
+        }
+
+        let org = move.perform()
+        moves.append((move, org))
+
+        updateGameStatusAfterMove()
+    }
+
+    func endGame(loser: GameSide? = nil) {
+        timer?.cancel()
+        state = .ended(loser)
+
+        print("Game ended: \(loser != nil ? loser.debugDescription : "Draw")")
+    }
+    
+    /// move validation
+    private func validateMove(_ move: Move) throws {
         let myKing = getGeneral(of: move.piece.side)
 
         // simulate the move
@@ -146,37 +183,12 @@ extension GameManager {
         defer { move.piece.position = originalPosition }
 
         // check if move is valid
-        try otherSidePieces.forEach {
-            if $0.canCheck(myKing) {
-                throw MoveError.loseKing
-            }
+        if otherSidePieces.contains(where: { $0.canCheck(myKing) }) {
+            throw MoveError.loseKing
         }
-
-        return true
     }
 
-    func performMove(_ move: Move) throws {
-        // Check if the move is valid and update the game state accordingly
-        guard try canMove(move) else { return }
-        if let captured = move.captured, let idx = pieces.firstIndex(of: captured) {
-            capturedPieces.append(captured)
-            pieces.remove(at: idx)
-        }
-
-        let org = move.perform()
-        moves.append((move, org))
-
-        updateGameStatus()
-    }
-
-    func endGame(loser: GameSide? = nil) {
-        timer?.cancel()
-        state = .ended(loser)
-
-        print("Game ended: \(loser != nil ? loser.debugDescription : "Draw")")
-    }
-
-    func updateGameStatus() {
+    private func updateGameStatusAfterMove() {
 
         // Update turn
         currentPlayer.toggle()
@@ -188,15 +200,16 @@ extension GameManager {
         let isInCheck = opponentPieces.contains { $0.canCheck(myKing) }
 
         if isInCheck {
-            let canMoveOutOfCheck = pieces.filter { $0.side == currentPlayer }.contains {
-                !$0.availableMoves.filter { move in
-                    (try? self.canMove(move)) == true
-                }.isEmpty
-            }
+            do {
+                // Validate state: Validate all possible moves. If none (no error thrown) then end game.
+                try pieces.filter { $0.side == currentPlayer }.forEach { samePiece in
+                    try samePiece.availableMoves.forEach { move in
+                        try self.validateMove(move)
+                    }
+                }
 
-            if !canMoveOutOfCheck {
                 endGame(loser: currentPlayer)
-            }
+            } catch {}
         }
     }
 }

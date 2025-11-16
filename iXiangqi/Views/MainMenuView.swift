@@ -37,9 +37,16 @@ struct MainMenuView: View {
                 Spacer()
             }
         }
+#if targetEnvironment(simulator)
         .fullScreenCover(isPresented: $isGameViewPresented) {
-            GameView().environmentObject(GameManager())
+            GameView()
         }
+#else
+        .fullScreenCover(isPresented: $isGameViewPresented) {
+            GameView(gameManager: gameManager)
+                .environmentObject(gameManager)
+        }
+#endif
         .transaction { t in
             t.disablesAnimations = true
             t.animation = .linear(duration: 1)

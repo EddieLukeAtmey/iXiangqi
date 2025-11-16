@@ -26,12 +26,6 @@ class GamePiece: Identifiable {
         self.gameManager = gameManager
     }
 
-//    func canMove(to: Position) throws -> Bool {
-////        guard availableMoves.contains(position) else { throw MoveError.invalid }
-////        return try delegate?.canMove(piece: self, to: position) ?? false
-//        return false
-//    }
-
     func canCheck(_ king: General) -> Bool {
         availableMoves.contains(where: { $0.captured == king })
     }

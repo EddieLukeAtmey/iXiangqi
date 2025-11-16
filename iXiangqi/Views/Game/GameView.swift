@@ -9,20 +9,38 @@ import SwiftUI
 
 struct GameView: View {
 
-    @EnvironmentObject var gameManager: GameManager
+    // TODO: Can be refactor
+    @StateObject var gameManager: GameManager = GameManager()
 
     var body: some View {
-        VStack {
-            TopMenuView(p1Name: "p1", p2Name: "p2")
-            BoardView()
+        GeometryReader { geometry in
+            VStack {
+                TopMenuView()
+
+                PlayerInfoView(name: "Black",
+                               side: .black,
+                               timer: $gameManager.p2Timer,
+                               capturedPieces: $gameManager.blackCapturedPieces)
+
+                Spacer(minLength: 10)
+                BoardView()
+                    .frame(width: min(geometry.size.width, geometry.size.height),
+                           height: min(geometry.size.width, geometry.size.height))
+
+                Spacer(minLength: 30)
+
+                PlayerInfoView(name: "Red",
+                               side: .red,
+                               timer: $gameManager.p1Timer,
+                               capturedPieces: $gameManager.redCapturedPieces)
+            }
+            .environmentObject(gameManager)
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        .padding(.zero)
-        .frame(maxWidth: .infinity)
     }
 }
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
-        GameView().environmentObject(GameManager())
     }
 }

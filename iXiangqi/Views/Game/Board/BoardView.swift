@@ -16,8 +16,11 @@ struct BoardView: View {
     @State var moves: [Move]?
     @State private var message: String?
 
-    var body: some View {
-        let width = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) * 8/9
+    var body: some View { GeometryReader { proxy in
+
+        // Use the minimum of available width/height to keep board square-ish
+        let available = min(proxy.size.width, proxy.size.height)
+        let width = available * 8/9
         let spacing = width / 8 // horizontal
 
         // vertical
@@ -28,7 +31,7 @@ struct BoardView: View {
             Color(red: 240/255, green: 208/255, blue: 160/255) // board's background color
 
             LinesView(width: width, height: fullHeight, halfHeight: halfHeigth, spacing: spacing)
-            
+
             // Add the game pieces
             ForEach(gameManager.pieces, id: \.self) { piece in
                 GamePieceView(piece: piece, selected: piece == selectedPiece)
@@ -70,7 +73,9 @@ struct BoardView: View {
             }
         }
         .frame(width:  width, height: fullHeight)
-    }
+        // Center the board within the available space
+        .position(x: proxy.size.width / 2, y: proxy.size.height / 2)
+    }}
 
     private func performMove(_ move: Move) {
         // Perform the piece movement here
