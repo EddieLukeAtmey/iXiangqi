@@ -10,7 +10,7 @@ import Foundation
 /// 仕 or 士
 final class Advisor: GamePiece {
     override var title: String {
-        side == .red ? "仕" : "士"
+        side == .white ? "仕" : "士"
     }
 
     override var availableMoves: [Move] {

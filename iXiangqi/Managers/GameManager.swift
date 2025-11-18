@@ -22,6 +22,9 @@ final class GameManager: ObservableObject {
         capturedPieces.filter({ $0.side != side })
     }
 
+    var whiteMoves = PlayerManager()
+    var blackMoves = PlayerManager()
+
     /// This array is black's side game pieces, those captured by red.
     @Published var redCapturedPieces = [GamePiece]()
 
@@ -31,7 +34,7 @@ final class GameManager: ObservableObject {
     // moves and their original position
     private(set) var moves = [(Move, Position)]()
     @Published private(set) var state = GameState.initialized
-    private(set) var currentPlayer: GameSide = .red {
+    private(set) var currentPlayer: GameSide = .white {
         didSet { state = .isPlaying(currentPlayer) }
     }
 
@@ -50,18 +53,18 @@ final class GameManager: ObservableObject {
         var p = [Position]()
         for i in BoardMarkerH.left...BoardMarkerH.right {
             p.append(.init(x: i, y: BoardMarkerV.blackBot))
-            p.append(.init(x: i, y: BoardMarkerV.redBot))
+            p.append(.init(x: i, y: BoardMarkerV.whiteBot))
 
             // Pawn
             if i & 1 == 0 {
                 p.append(.init(x: i, y: BoardMarkerV.blackRiver - 1))
-                p.append(.init(x: i, y: BoardMarkerV.redRiver + 1))
+                p.append(.init(x: i, y: BoardMarkerV.whiteRiver + 1))
             }
 
             if i == BoardMarkerH.leftCanon || i == BoardMarkerH.rightCanon {
                 // Cannon
                 p.append(.init(x: i, y: BoardMarkerV.blackMid))
-                p.append(.init(x: i, y: BoardMarkerV.redMid))
+                p.append(.init(x: i, y: BoardMarkerV.whiteMid))
             }
         }
 
@@ -78,16 +81,16 @@ final class GameManager: ObservableObject {
 
         Self.allStartingPositions.forEach { pos in
 
-            let side: GameSide = pos.y > BoardMarkerV.redRiver ? .red : .black
+            let side: GameSide = pos.y > BoardMarkerV.whiteRiver ? .white : .black
 
             switch (pos.x, pos.y) {
 
             case (_, BoardMarkerV.blackRiver - 1): fallthrough
-            case (_, BoardMarkerV.redRiver + 1):
+            case (_, BoardMarkerV.whiteRiver + 1):
                 pieces.append(Pawn(position: pos, side: side, gameManager: self))
 
             case (_, BoardMarkerV.blackMid): fallthrough
-            case (_, BoardMarkerV.redMid):
+            case (_, BoardMarkerV.whiteMid):
                 pieces.append(Cannon(position: pos, side: side, gameManager: self))
 
             case (let x, _):
@@ -119,7 +122,7 @@ final class GameManager: ObservableObject {
     }
 
     func start() {
-        state = .isPlaying(.red)
+        state = .isPlaying(.white)
         startTimer()
     }
 
@@ -129,7 +132,7 @@ final class GameManager: ObservableObject {
             .autoconnect()
             .sink { [weak self] _ in
                 guard let self = self else { return }
-                if self.currentPlayer == .red {
+                if self.currentPlayer == .white {
                     self.p1Timer -= 1
                 } else {
                     self.p2Timer -= 1
@@ -147,7 +150,7 @@ extension GameManager {
         // Check if the move is valid and update the game state accordingly
         try validateMove(move)
         if let captured = move.captured, let idx = pieces.firstIndex(of: captured) {
-            if captured.side == .red {
+            if captured.side == .white {
                 blackCapturedPieces.append(captured)
             } else {
                 redCapturedPieces.append(captured)

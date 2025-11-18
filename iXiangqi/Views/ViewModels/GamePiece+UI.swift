@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension GamePiece {
-    var color: Color { side == .red ? .red : .black }
+    var color: Color { side == .white ? .red : .black }
 }
 
 extension GamePiece: Hashable {

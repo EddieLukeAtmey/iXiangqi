@@ -18,7 +18,7 @@ struct PlayerInfoView: View {
         VStack(alignment: .leading) {
             Text(name)
                 .font(.title)
-                .foregroundColor(side == .red ? .red : .black)
+                .foregroundColor(side == .white ? .red : .black)
             Text(formattedTime(from: timer))
                 .font(.title)
 
@@ -41,5 +41,5 @@ struct PlayerInfoView: View {
     let gm = GameManager()
     let pieces = gm.pieces.dropLast(15)
 
-    return PlayerInfoView(name: "Hhihi", side: .red, timer: .constant(100), capturedPieces: .constant([]))
+    return PlayerInfoView(name: "Hhihi", side: .white, timer: .constant(100), capturedPieces: .constant([]))
 }

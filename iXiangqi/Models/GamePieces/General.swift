@@ -10,7 +10,7 @@ import Foundation
 /// 帥 or 將
 final class General: GamePiece {
     override var title: String {
-        side == .red ? "帥" : "將"
+        side == .white ? "帥" : "將"
     }
 
     override var availableMoves: [Move] {

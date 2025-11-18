@@ -10,7 +10,7 @@ import Foundation
 /// 馬 or 傌
 final class Knight: GamePiece {
     override var title: String {
-        side == .red ? "傌" : "馬"
+        side == .white ? "傌" : "馬"
     }
 
     /// Knights moves one straight (horizontal || vertical) then one diagonal (up-left, up-right, down-left, down-right)

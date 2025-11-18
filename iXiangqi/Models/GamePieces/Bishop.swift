@@ -10,7 +10,7 @@ import Foundation
 /// 象 or 相
 final class Bishop: GamePiece {
     override var title: String {
-        side == .red ? "相" : "象"
+        side == .white ? "相" : "象"
     }
 
     override var availableMoves: [Move] {
@@ -31,7 +31,7 @@ final class Bishop: GamePiece {
     
     private func canMoveByRule(to: Position) -> Bool {
         // Can't cross the river
-        if (side == .red && to.y < 5) || (side == .black && to.y > 4) {
+        if (side == .white && to.y < 5) || (side == .black && to.y > 4) {
             return false
         }
         

@@ -30,7 +30,7 @@ struct GameView: View {
                 Spacer(minLength: 30)
 
                 PlayerInfoView(name: "Red",
-                               side: .red,
+                               side: .white,
                                timer: $gameManager.p1Timer,
                                capturedPieces: $gameManager.redCapturedPieces)
             }

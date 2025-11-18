@@ -76,7 +76,7 @@ extension Position {
         let red = RedCastle.v
 
         guard let side else { return y.isIn(red) || y.isIn(black) }
-        if side == .red { return y.isIn(red) }
+        if side == .white { return y.isIn(red) }
         return y.isIn(black)
     }
 }

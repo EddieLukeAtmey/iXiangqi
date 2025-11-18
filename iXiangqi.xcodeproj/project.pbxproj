@@ -34,6 +34,7 @@
 		2CC114F12A6BC2DA002060BE /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC114ED2A6BC2DA002060BE /* BoardView.swift */; };
 		2CC114F22A6BC2DA002060BE /* LinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC114EF2A6BC2DA002060BE /* LinesView.swift */; };
 		2CC44A0C2BFCF16200E4C7C9 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC44A0B2BFCF16200E4C7C9 /* ToastView.swift */; };
+		65609B562ECC601B00A2AD73 /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65609B552ECC601B00A2AD73 /* PlayerManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		2CDA55BE2ECA074A007998A7 /* Playground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playground.swift; sourceTree = "<group>"; };
 		2CE8815C2C0A28FC0041BEA9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2CE8815D2C0A29030041BEA9 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		65609B552ECC601B00A2AD73 /* PlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,7 +116,7 @@
 				2C8F19FA2A6910AE00887FFA /* iXiangqiApp.swift */,
 				2CC114C72A6911A0002060BE /* Models */,
 				2CC114B62A6911A0002060BE /* Views */,
-				2CC114C52A6911A0002060BE /* GameManager */,
+				2CC114C52A6911A0002060BE /* Managers */,
 				2C8F19FE2A6910AF00887FFA /* Assets.xcassets */,
 				2C8F1A012A6910AF00887FFA /* Preview Content */,
 			);
@@ -178,12 +180,13 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		2CC114C52A6911A0002060BE /* GameManager */ = {
+		2CC114C52A6911A0002060BE /* Managers */ = {
 			isa = PBXGroup;
 			children = (
 				2CC114C62A6911A0002060BE /* GameManager.swift */,
+				65609B552ECC601B00A2AD73 /* PlayerManager.swift */,
 			);
-			path = GameManager;
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		2CC114C72A6911A0002060BE /* Models */ = {
@@ -316,6 +319,7 @@
 				2CC114DD2A6911A0002060BE /* Move.swift in Sources */,
 				2CC114F12A6BC2DA002060BE /* BoardView.swift in Sources */,
 				2CC114E22A6911A0002060BE /* Cannon.swift in Sources */,
+				65609B562ECC601B00A2AD73 /* PlayerManager.swift in Sources */,
 				2CC114DF2A6911A0002060BE /* Knight.swift in Sources */,
 				2CC114DA2A6911A0002060BE /* Number+Extensions.swift in Sources */,
 				2C07E9862A6A9D9300636D6B /* MoveView.swift in Sources */,

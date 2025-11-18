@@ -20,7 +20,7 @@ struct MoveView: View {
 
     private func getFillColor() -> Color {
         if let captured = move.captured {
-            return captured.side == .red ? Color.black : Color.red
+            return captured.side == .white ? Color.black : Color.red
         } else {
             return Color.green
         }

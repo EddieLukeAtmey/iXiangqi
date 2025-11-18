@@ -31,6 +31,6 @@ class GamePiece: Identifiable {
     }
 
     final func makeVerticalStep(_ step: Int) -> Int {
-        side == .red ? -step : step
+        side == .white ? -step : step
     }
 }

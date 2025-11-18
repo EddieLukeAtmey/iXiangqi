@@ -10,7 +10,7 @@ import Foundation
 /// 炮 or 砲
 final class Cannon: GamePiece {
     override var title: String {
-        side == .red ? "砲" : "炮"
+        side == .white ? "砲" : "炮"
     }
 
     override var availableMoves: [Move] {
